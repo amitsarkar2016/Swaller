@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Wallpaper.iml" filepath="$PROJECT_DIR$/.idea/modules/Wallpaper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Wallpaper.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Swaller.iml" filepath="$PROJECT_DIR$/.idea/modules/Swaller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Swaller.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Swaller.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Swaller.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Swaller.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Swaller.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Swaller.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Swaller.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Swaller.app.unitTest.iml" />
     </modules>
   </component>
 </project>

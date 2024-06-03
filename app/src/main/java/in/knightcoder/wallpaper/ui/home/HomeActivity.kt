@@ -1,28 +1,32 @@
-package `in`.knightcoder.wallpaper
+package `in`.knightcoder.wallpaper.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.AuthFailureError
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import `in`.knightcoder.wallpaper.databinding.ActivityMainBinding
-import org.json.JSONException
-import org.json.JSONObject
+import `in`.knightcoder.wallpaper.R
+import `in`.knightcoder.wallpaper.api.RetrofitInstance
+import `in`.knightcoder.wallpaper.databinding.ActivityHomeBinding
+import `in`.knightcoder.wallpaper.model.WallpaperModel
+import `in`.knightcoder.wallpaper.repository.WallpaperRepository
+import `in`.knightcoder.wallpaper.ui.setWallpaper.SetWallpaperActivity
 import java.util.Locale
 
-class MainActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
-    private lateinit var binding: ActivityMainBinding
+class HomeActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
+    private lateinit var binding: ActivityHomeBinding
     private lateinit var wallpaperAdapter: WallpaperAdapter
+    private lateinit var viewModel: WallpaperViewModel
     var wallpaperModelList = mutableListOf<WallpaperModel>()
     var pageNumber: Int = 1
 
@@ -32,10 +36,19 @@ class MainActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
     var scrollOutItems: Int = 0
     var url: String = "https://api.pexels.com/v1/curated/?page=$pageNumber&per_page=80"
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = ViewModelProvider(
+            this, WallpaperViewModelFactory(
+                WallpaperRepository(
+                    RetrofitInstance.api
+                )
+            )
+        )[WallpaperViewModel::class.java]
 
         wallpaperModelList = ArrayList()
         wallpaperAdapter = WallpaperAdapter(this, wallpaperModelList)
@@ -68,51 +81,23 @@ class MainActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
             }
         })
 
+        viewModel.wallpapers.observe(this) { wallpapers ->
+            wallpaperModelList.addAll(wallpapers)
+            wallpaperAdapter.notifyDataSetChanged()
+            Log.e("wallpaperModelList", wallpaperModelList.toString())
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+//            Toast.makeText(this@HomeActivity, message, Toast.LENGTH_SHORT).show()
+        }
+
 
         fetchWallpaper()
     }
 
     fun fetchWallpaper() {
-        val request: StringRequest =
-            object : StringRequest(Method.GET, url, Response.Listener { response ->
-                try {
-                    val jsonObject = JSONObject(response)
-
-                    val jsonArray = jsonObject.getJSONArray("photos")
-
-                    val length = jsonArray.length()
-
-                    for (i in 0 until length) {
-                        val `object` = jsonArray.getJSONObject(i)
-
-                        val id = `object`.getInt("id")
-
-                        val objectImages = `object`.getJSONObject("src")
-
-                        val orignalUrl = objectImages.getString("original")
-                        val mediumUrl = objectImages.getString("medium")
-
-                        val wallpaperModel = WallpaperModel(id, orignalUrl, mediumUrl)
-                        wallpaperModelList!!.add(wallpaperModel)
-                    }
-
-                    wallpaperAdapter!!.notifyDataSetChanged()
-                    pageNumber++
-                } catch (e: JSONException) {
-                }
-            }, Response.ErrorListener { }) {
-                @Throws(AuthFailureError::class)
-                override fun getHeaders(): Map<String, String> {
-                    val params: MutableMap<String, String> = HashMap()
-                    params["Authorization"] =
-                        "563492ad6f917000010000011069c623c7ad4919b7f934771d8adbe9"
-
-                    return params
-                }
-            }
-
-        val requestQueue = Volley.newRequestQueue(applicationContext)
-        requestQueue.add(request)
+        viewModel.getCuratedWallpapers(pageNumber, 80)
+        pageNumber++
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -135,7 +120,7 @@ class MainActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
                 val query = editText.text.toString().lowercase(Locale.getDefault())
                 url = "https://api.pexels.com/v1/search/?page=$pageNumber&per_page=80&query=$query"
                 wallpaperModelList.clear()
-                fetchWallpaper()
+                viewModel.searchWallpapers(query, pageNumber, 80)
             }
 
             alert.setNegativeButton("No") { _, i -> }
@@ -148,8 +133,8 @@ class MainActivity : AppCompatActivity(), WallpaperAdapter.WallpaperCallBack {
 
     override fun onItemClick(item: WallpaperModel) {
         startActivity(
-            Intent(this, FullScreenWallpaper::class.java).putExtra(
-                "originalUrl", item.originalUrl
+            Intent(this, SetWallpaperActivity::class.java).putExtra(
+                "originalUrl", item.src.original
             )
         )
     }

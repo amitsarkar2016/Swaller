@@ -12,13 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="in.knightcoder.wallpaper.FullScreenWallpaper"
+            android:name="in.knightcoder.wallpaper.ui.setWallpaper.SetWallpaperActivity"
             android:enabled="true"
             android:exported="true"
             android:label="Details"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.home.HomeActivity" />
         <activity
-            android:name="in.knightcoder.wallpaper.MainActivity"
+            android:name="in.knightcoder.wallpaper.ui.home.HomeActivity"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".DownloadReceiver" />
+        <receiver android:name=".receiver.DownloadReceiver" />
     </application>
 
 </manifest>

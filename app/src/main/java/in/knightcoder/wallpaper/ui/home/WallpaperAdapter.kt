@@ -1,10 +1,12 @@
-package `in`.knightcoder.wallpaper
+package `in`.knightcoder.wallpaper.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import `in`.knightcoder.wallpaper.model.WallpaperModel
 import `in`.knightcoder.wallpaper.databinding.ImageItemBinding
 
 class WallpaperAdapter(
@@ -35,7 +37,9 @@ class WallpaperAdapter(
     inner class WallpaperViewHolder(private val binding: ImageItemBinding) :
         ViewHolder(binding.root) {
         fun bind(item: WallpaperModel, position: Int) {
-            Glide.with(binding.imageViewItem).load(wallpaperModelList[position].mediumUrl)
+            Glide.with(binding.imageViewItem)
+                .load(item.src.original)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.imageViewItem)
             binding.imageViewItem.setOnClickListener {
                 wallpaperCallBack.onItemClick(item)

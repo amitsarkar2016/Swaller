@@ -1,4 +1,4 @@
-package `in`.knightcoder.wallpaper
+package `in`.knightcoder.wallpaper.receiver
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager

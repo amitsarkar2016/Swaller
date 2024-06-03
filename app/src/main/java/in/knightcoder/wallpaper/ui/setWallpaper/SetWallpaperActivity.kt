@@ -1,4 +1,4 @@
-package `in`.knightcoder.wallpaper
+package `in`.knightcoder.wallpaper.ui.setWallpaper
 
 import android.app.DownloadManager
 import android.app.WallpaperManager
@@ -12,17 +12,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import `in`.knightcoder.wallpaper.DownloadReceiver
-import `in`.knightcoder.wallpaper.databinding.ActivityFullScreenWallpaperBinding
+import `in`.knightcoder.wallpaper.receiver.DownloadReceiver
+import `in`.knightcoder.wallpaper.databinding.ActivitySetWallpaperBinding
 import java.io.IOException
 
-class FullScreenWallpaper : AppCompatActivity() {
+class SetWallpaperActivity : AppCompatActivity() {
     private var originalUrl: String? = null
-    private lateinit var binding: ActivityFullScreenWallpaperBinding
+    private lateinit var binding: ActivitySetWallpaperBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFullScreenWallpaperBinding.inflate(layoutInflater)
+        binding = ActivitySetWallpaperBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         originalUrl = intent.getStringExtra("originalUrl")
